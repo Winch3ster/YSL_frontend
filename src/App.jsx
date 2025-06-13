@@ -8,6 +8,7 @@ import { Routes, Route } from 'react-router-dom';
 import SignInView from './pages/sign_in';
 import TreatmentDetailsView from './pages/treatment_details';
 import EditTreatmentView from './pages/edit_treatment';
+import EditCustomerDetailsPage from './pages/edit_customer_details';
 
 function App() {
 
@@ -25,6 +26,8 @@ function App() {
                 <Route path="/signIn/" element={<SignInView />} />
                 <Route path="/treatmentDetails/:treatmentID" element={<TreatmentDetailsView />} />
                 <Route path="/editTreatmentDetails/:treatmentID" element={<EditTreatmentView />} />
+                <Route path="/editCustomerDetails/:customerID" element={<EditCustomerDetailsPage />} />
+
               </Routes>
         </div>
 

@@ -2,8 +2,9 @@ import React, { useEffect,useState,useRef   } from 'react'
 import { useParams, useNavigate  } from 'react-router-dom';
 import Loading from '../components/loading';
 import StandardButton from '../components/standard_button';
-import {Card, Flex, Modal, Row, Col } from 'antd';
+import {Card, Flex, Modal, Row, Col, Button, Upload,message } from 'antd';
 import TextArea from 'antd/es/input/TextArea'
+import axios from 'axios';
 
 const CustomerDetails = () => {
     const MAXIMUM_CHARACTER_COUNT = 300;
@@ -15,7 +16,7 @@ const CustomerDetails = () => {
     const textAreaRef = useRef(null);
     const [characterCount, setCharacterCount] = useState(0);
     const [text, setText] = useState('');
-
+    const [customerHasConsentForm, setCustomerHasConsentForm] = useState(false)
 
     const conditionDescriptionTextBoxOnChange = (e) => {
         const value = e.target.value;
@@ -44,10 +45,11 @@ const CustomerDetails = () => {
             const response = await fetch(`http://127.0.0.1:5000/customerConditions/${id}`);
             if (!response.ok) {
                 throw new Error('Network response was not ok');
+            }else{
+                const data = await response.json();
+                setCustomerConditions(data);
             }
-            const data = await response.json();
-            setCustomerConditions(data);
-            console.log("Customer Conditions:", data);
+
         } catch (error) {
             console.error('Error fetching customer details:', error);
         }
@@ -66,6 +68,23 @@ const CustomerDetails = () => {
         }
     }
 
+
+    const fetchConsentForm = async () => {
+        try {
+            const response = await fetch(`http://127.0.0.1:5000/customerConsentForm/${id}`);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            console.log("This is data fro fetch consentform: " + data);
+            console.log(data)
+            setCustomerHasConsentForm(data.hasConsentForm);
+        } catch (error) {
+            console.error('Error fetching customer details:', error);
+        }
+    }
+
+
     
     const renderViewCondition = (condition) => {
         return (
@@ -78,6 +97,7 @@ const CustomerDetails = () => {
     useEffect(() => {
         fetchCustomerDetails();
         fetchConditions();
+        fetchConsentForm();
     },[]);
 
 
@@ -115,6 +135,7 @@ const CustomerDetails = () => {
         if (response.ok) {
             fetchCustomerDetails();
             fetchConditions();
+            fetchConsentForm();
             alert('Feedback submitted successfully!');
         } else {
             alert('Failed to submit feedback.');
@@ -125,7 +146,47 @@ const CustomerDetails = () => {
             console.error(err);
         }
     };
+    const openConsentForm = async () =>{
+         try {
+            const response = await fetch(`http://127.0.0.1:5000/viewCustomerConsentForm/${id}`);
+        } catch (error) {
+            console.error('Error opening consent form', error);
+        }
+    }
 
+        
+    const handleUpload = async (file) => {
+        const extension = file.name.split('.').pop();
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('customerId', id); 
+        formData.append('fileName', `_Consent_Form.${extension}`); 
+
+        try {
+            const response = await axios.post('http://127.0.0.1:5000/uploadCustomerConsentForm', formData, {
+                headers: {
+                'Content-Type': 'multipart/form-data',
+                },
+            });
+            console.log("This is the response")
+            console.log(response)
+
+             console.log("result.data.status: " + response.data.status)
+            if (response.data.status == "Success") {
+                alert(`${file.name} uploaded successfully`);
+                message.success(`${file.name} uploaded successfully`);
+            } else {
+                message.error(`Failed to upload ${file.name}`);
+            }
+            fetchConsentForm();
+        } catch (error) {
+            console.error(error);
+            message.error(`Error uploading file: ${file.name}`);
+            alert(`Error uploading file: ${file.name}`)
+        }
+
+        return false;
+    };
 
   
 
@@ -133,18 +194,20 @@ const CustomerDetails = () => {
     return customerData ?  (
         <>
             <div style={{ padding: 20 }}>
-            <div>
+            <div style={{display:'flex', alignItems:'center'}}>
                 <h1 style={{fontSize:"28px"}}>Customer Details</h1>
+                <Button onClick={() => navigate(`/editCustomerDetails/${id}`)} style={{marginLeft:"20px"}}>Edit</Button>
             </div>
 
             <div className='flex w-8/12 justify-between items-center pt-5'>
                 <div>
                     <p>Customer ID: {customerData.customerId ?? "-"}</p>
+                    <p>Old Customer ID: {customerData.oldCustomerId ?? "-"}</p>
                     <p>Name: {customerData.customerName ?? "-"}</p>
                     <p>Email: {customerData.email ?? "-"}</p>
                     <p>IC: {customerData.ic ?? "-"}</p>
                     <p>Gender: {customerData.gender ?? "-"}</p>
-
+                    <p>Race: {customerData.race ?? "-"}</p>
                 </div>
 
                 <div>
@@ -153,6 +216,25 @@ const CustomerDetails = () => {
                     <p>Instagram: {customerData.instagram ?? "-"}</p>
                     <p>How did you get know our center?: {customerData.howDidYouFindUs ?? "-"}</p>
                 </div>
+
+            </div>
+             <div style={{height:"20px"}}/>
+            <div>
+                {customerHasConsentForm ? 
+                <div style={{display:"flex"}}>
+                    <StandardButton onClick={openConsentForm} label="View Consent Form"/>
+                    <div style={{width:"20px"}}/>
+                     <Upload beforeUpload={handleUpload} showUploadList={false}>
+                        <StandardButton label="Update Consent Form" />
+                    </Upload>   
+                </div>
+                :
+                 <div>
+                    <Upload beforeUpload={handleUpload} showUploadList={false}>
+                        <StandardButton label="Upload Consent Form" />
+                    </Upload>                        
+                 </div>
+                }
             </div>
             <hr style={{backgroundColor:"#d9d9d9",color:"#d9d9d9", height:"1px", marginInline:"10px", marginTop:"30px"}}></hr>
 
@@ -166,7 +248,10 @@ const CustomerDetails = () => {
             {/* To render condition card */}
 
             <Flex wrap gap="medium">
-                {customerConditions.map((condition) => (
+                {
+                
+                
+                customerConditions.map((condition) => (
                     <Card 
                         title={condition.conditionDate} 
                         extra={renderViewCondition(condition)} 
@@ -196,7 +281,7 @@ const CustomerDetails = () => {
 
 
             <Modal
-                title="Basic Modal"
+                title="Add Condition"
                 closable={{ 'aria-label': 'Custom Close Button' }}
                 open={isAddConditionModalOpen}
                 onOk={handleOk}
@@ -204,7 +289,7 @@ const CustomerDetails = () => {
             >
                 <Row>
                     <Col span={24}>
-                        <p>Treatment Description</p>
+                        <p>Condition Description</p>
                     </Col>
                     <Col span={24}>
                         <TextArea 

@@ -10,8 +10,9 @@ import Loading from '../components/loading';
 
 const EditTreatmentView = () => {
     const { treatmentID } = useParams();
-
+    
     const navigate = useNavigate();
+
     const [painLevel, setPainLevel] = useState(0);
     const [numbLevel, setNumbLevel] = useState(0);
     const [tenseLevel, setTenseLevel] = useState(0);
@@ -87,6 +88,27 @@ const EditTreatmentView = () => {
             setLoading(false);
         } catch (error) {
             alert('Error fetching treatment details: ', error);
+        }
+    }
+
+
+    const deleteTreatment = async () => {
+        try {    
+            const response = await fetch(`http://127.0.0.1:5000/deleteTreatment/${treatmentID}`, {
+                method: 'DELETE',
+                headers: {
+                'Content-Type': 'application/json',
+                "Access-Control-Allow-Origin": "*",
+                },
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            //Back to the previous page 
+            navigate(-1);
+
+        }catch (error) {
+            alert('Error deleting treatment: ', error);
         }
     }
 
@@ -223,7 +245,9 @@ const EditTreatmentView = () => {
             </div>
 
             <Row className='mt-10 flex justify-end'>
-                <StandardButton label="Cancel" onClick={() =>  navigate(-1)} danger={true}></StandardButton>
+                <StandardButton label="Cancel" onClick={() =>  navigate(-1)} secondary={true}></StandardButton>
+                <div style={{width:"10px"}}></div>
+                <StandardButton label="Delete" onClick={deleteTreatment} danger={true}></StandardButton>
                 <div style={{width:"10px"}}></div>
                 <StandardButton label="Submit" onClick={handleEditTreatment}></StandardButton>
             </Row>
