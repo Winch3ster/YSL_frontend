@@ -7,7 +7,7 @@ const Header = () => {
   return (
     <div>
       <div className=' w-full h-16 flex items-center justify-between px-4'>
-        <div >YSL Management Dashboard</div>
+        <div onClick={() => {navigate('/')}} style={{cursor:"pointer"}}>YSL Management Dashboard</div>
 
         {/* Action buttons*/}
         <div>

@@ -9,6 +9,7 @@ import SignInView from './pages/sign_in';
 import TreatmentDetailsView from './pages/treatment_details';
 import EditTreatmentView from './pages/edit_treatment';
 import EditCustomerDetailsPage from './pages/edit_customer_details';
+import AddCustomerDetailsPage from './pages/add_customer';
 
 function App() {
 
@@ -18,17 +19,17 @@ function App() {
         <Header></Header>
         {/*Page content*/}
         <div style={{padding:"20px"}}>
-              <Routes>
-                <Route path="/" element={<Dashboard/>} />
-                <Route path="/customer/:id" element={<CustomerDetails />} />
-                <Route path="/condition/:id" element={<ConditionDetails />} />
-                <Route path="/addTreatment/:conditionID" element={<AddTreatmentView />} />
-                <Route path="/signIn/" element={<SignInView />} />
-                <Route path="/treatmentDetails/:treatmentID" element={<TreatmentDetailsView />} />
-                <Route path="/editTreatmentDetails/:treatmentID" element={<EditTreatmentView />} />
-                <Route path="/editCustomerDetails/:customerID" element={<EditCustomerDetailsPage />} />
-
-              </Routes>
+            <Routes>
+              <Route path="/" element={<Dashboard/>} />
+              <Route path="/customer/:id" element={<CustomerDetails />} />
+              <Route path="/condition/:id" element={<ConditionDetails />} />
+              <Route path="/addTreatment/:conditionID" element={<AddTreatmentView />} />
+              <Route path="/signIn/" element={<SignInView />} />
+              <Route path="/treatmentDetails/:treatmentID" element={<TreatmentDetailsView />} />
+              <Route path="/editTreatmentDetails/:treatmentID" element={<EditTreatmentView />} />
+              <Route path="/editCustomerDetails/:customerID" element={<EditCustomerDetailsPage />} />
+              <Route path="/addCustomer/" element={<AddCustomerDetailsPage />} />
+            </Routes>
         </div>
 
       </div>

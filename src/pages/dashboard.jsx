@@ -2,6 +2,8 @@ import React, {useEffect, useState} from 'react'
 import { AudioOutlined } from '@ant-design/icons';
 import { Input, Space,Table,Tag  } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import StandardButton from '../components/standard_button';
+import SizedBox from '../components/sizedBox';
 
 
 const { Search } = Input;
@@ -90,16 +92,21 @@ const Dashboard = () => {
             {/* Greetings*/}
             <div style={{fontSize:"16px"}}>Greeting! Welcome to YSL Management Dashboard</div>
             
-            <div style={{width:"400px", marginTop:"20px", marginBottom:"30px"}}>  
-              <Search
-                placeholder="Search for customer..."
-                allowClear
-                enterButton="Search"
-                size="large"
-                onSearch={onSearch}
-                onChange = {onChange}
-              />
-            </div>
+              <div style={{width:"800px", marginTop:"20px", marginBottom:"30px", display: "flex"}}>  
+                <Search
+                  placeholder="Search for customer..."
+                  allowClear
+                  enterButton="Search"
+                  size="large"
+                  onSearch={onSearch}
+                  onChange = {onChange}
+                  style={{width:"400px"}}
+                />
+                <SizedBox width={50}></SizedBox>
+                <StandardButton onClick={() => navigate('/addCustomer/')} label="Register Customer"  />
+              </div>
+              
+        
 
               <Table 
                 columns={columns} 

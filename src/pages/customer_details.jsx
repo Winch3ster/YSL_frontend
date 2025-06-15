@@ -17,6 +17,7 @@ const CustomerDetails = () => {
     const [characterCount, setCharacterCount] = useState(0);
     const [text, setText] = useState('');
     const [customerHasConsentForm, setCustomerHasConsentForm] = useState(false)
+    const [isLoading, setIsLoading] = useState(true);
 
     const conditionDescriptionTextBoxOnChange = (e) => {
         const value = e.target.value;
@@ -47,7 +48,10 @@ const CustomerDetails = () => {
                 throw new Error('Network response was not ok');
             }else{
                 const data = await response.json();
-                setCustomerConditions(data);
+                console.log("From fetch condition")
+                console.log(data)
+                console.log("--------------")
+                setCustomerConditions(data.data);
             }
 
         } catch (error) {
@@ -94,10 +98,23 @@ const CustomerDetails = () => {
         )
     }
 
-    useEffect(() => {
-        fetchCustomerDetails();
-        fetchConditions();
-        fetchConsentForm();
+    const fetchData = async () => {
+      try {
+            await fetchCustomerDetails();
+            await fetchConditions();
+            await fetchConsentForm();
+            setIsLoading(false)
+      } catch (error) {
+        alert("Error fetching data:", error);
+      }
+    };
+
+    // Call the async function
+    
+
+    useEffect(()  => {
+
+        fetchData();
     },[]);
 
 
@@ -127,7 +144,7 @@ const CustomerDetails = () => {
             body: JSON.stringify({ 
                 customerId: id,
                 conditionDescription: text,
-                undergoingTreatment: false, // Default value, can be changed later
+                undergoingTreatment: true,
              }), // POST body
         });
 
@@ -148,7 +165,7 @@ const CustomerDetails = () => {
     };
     const openConsentForm = async () =>{
          try {
-            const response = await fetch(`http://127.0.0.1:5000/viewCustomerConsentForm/${id}`);
+            await fetch(`http://127.0.0.1:5000/viewCustomerConsentForm/${id}`);
         } catch (error) {
             console.error('Error opening consent form', error);
         }
@@ -191,8 +208,12 @@ const CustomerDetails = () => {
   
 
 
-    return customerData ?  (
+    return isLoading ?  
+    (<Loading/>)
+    
+    :(
         <>
+            {console.log("renderrrrrrr")}
             <div style={{ padding: 20 }}>
             <div style={{display:'flex', alignItems:'center'}}>
                 <h1 style={{fontSize:"28px"}}>Customer Details</h1>
@@ -307,7 +328,7 @@ const CustomerDetails = () => {
             
         </>
          
-    ) : <Loading/>
+    ) 
 }
 
 export default CustomerDetails

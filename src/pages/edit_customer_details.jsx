@@ -131,7 +131,7 @@ const EditCustomerDetailsPage = () => {
 
 
                     <Form.Item
-                        label="email"
+                        label="Email"
                         name="email"
                         rules={[{
                             required: true,
@@ -143,7 +143,7 @@ const EditCustomerDetailsPage = () => {
 
 
                     <Form.Item
-                        label="ic"
+                        label="IC / Passport"
                         name="ic"
                         rules={[{
                             required: true,
@@ -155,7 +155,7 @@ const EditCustomerDetailsPage = () => {
 
 
                     <Form.Item
-                        label="gender"
+                        label="Gender"
                         name="gender"
                         rules={[{
                             required: true,
@@ -171,7 +171,7 @@ const EditCustomerDetailsPage = () => {
 
 
                     <Form.Item
-                        label="race"
+                        label="Race"
                         name="race"
                         rules={[{
                             required: true,
@@ -184,7 +184,7 @@ const EditCustomerDetailsPage = () => {
 
 
                     <Form.Item
-                        label="address"
+                        label="Address"
                         name="address"
                         rules={[{
                             required: true,
@@ -195,7 +195,7 @@ const EditCustomerDetailsPage = () => {
                     </Form.Item>
                     
                     <Form.Item
-                        label="phoneNumber"
+                        label="Phone Number"
                         name="phoneNumber"
                         rules={[{
                             required: true,
@@ -207,13 +207,12 @@ const EditCustomerDetailsPage = () => {
 
 
                     <Form.Item
-                        label="instagram"
+                        label="Instagram"
                         name="instagram"
                     >
                         <Input></Input>
                     </Form.Item>
 
-                    
                     <Form.Item
                         label="How did you get know our center?"
                         name="centerDiscovery"
