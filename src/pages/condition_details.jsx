@@ -7,7 +7,7 @@ import TextArea from 'antd/es/input/TextArea';
 import { AppContext } from "../App";
 
 const ConditionDetails = () => {
-        const {  userLoginDetails, setUserLoginDetails } = useContext(AppContext);
+    const {  userLoginDetails, setUserLoginDetails } = useContext(AppContext);
     
     const MAXIMUM_CHARACTER_COUNT = 300;
     const { id } = useParams();
