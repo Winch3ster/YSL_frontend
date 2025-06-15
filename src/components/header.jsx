@@ -1,9 +1,24 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import StandardButton from './standard_button'
 import { useNavigate } from 'react-router-dom'
+import { AppContext } from "../App";
+import { Popover,Avatar } from 'antd';
 
 const Header = () => {
   const navigate = useNavigate()
+  const {  userLoginDetails, setUserLoginDetails } = useContext(AppContext);
+  console.log("userLoginDetails")
+  console.log(userLoginDetails);
+  console.log("----------")
+
+  function signOut(){
+    setUserLoginDetails({});
+    alert("Signed out");
+  }
+  const content = (
+    <StandardButton label="Sign out" onClick={signOut}></StandardButton>    
+  );
+
   return (
     <div>
       <div className=' w-full h-16 flex items-center justify-between px-4'>
@@ -11,7 +26,18 @@ const Header = () => {
 
         {/* Action buttons*/}
         <div>
-          <StandardButton label="Sign In" onClick={() => {navigate('/signIn/')}}></StandardButton>    
+          {(userLoginDetails && Object.keys(userLoginDetails).length === 0) ?
+              <StandardButton label="Sign In" onClick={() => {navigate('/signIn/')}}></StandardButton>    
+
+            :
+            <Popover content={content} trigger="hover">
+              <div className='flex'>
+                <Avatar style={{ backgroundColor: '#7265e6', verticalAlign: 'middle', cursor:"pointer" }} size="large">
+                  {userLoginDetails?.name[0] ?? ""}
+                </Avatar>
+              </div>
+            </Popover>
+        }
         </div>
        
     </div>

@@ -1,4 +1,5 @@
 import './App.css'
+import React, { createContext, useState } from 'react';
 import Header from './components/header'
 import AddTreatmentView from './pages/add_treatment';
 import ConditionDetails from './pages/condition_details';
@@ -11,11 +12,15 @@ import EditTreatmentView from './pages/edit_treatment';
 import EditCustomerDetailsPage from './pages/edit_customer_details';
 import AddCustomerDetailsPage from './pages/add_customer';
 
+// Create the context
+export const AppContext = createContext();
+
 function App() {
+  const [userLoginDetails, setUserLoginDetails] = useState({});
 
   return (
-
-      <div className='main-app-container'>
+      <AppContext value={{ userLoginDetails, setUserLoginDetails }}>
+        <div className='main-app-container'>
         <Header></Header>
         {/*Page content*/}
         <div style={{padding:"20px"}}>
@@ -31,8 +36,8 @@ function App() {
               <Route path="/addCustomer/" element={<AddCustomerDetailsPage />} />
             </Routes>
         </div>
-
       </div>
+    </AppContext>
   )
 }
 

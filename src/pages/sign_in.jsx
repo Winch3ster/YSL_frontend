@@ -1,11 +1,13 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import { Button, Card, Checkbox, Form, Input, Modal } from 'antd';
 import { useNavigate } from 'react-router-dom';
-
+import { AppContext } from "../App";
 
 
 
 const SignInView = () => {
+    const { userLoginDetails, setUserLoginDetails } = useContext(AppContext);
+    
     const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
 
@@ -26,6 +28,10 @@ const SignInView = () => {
         const result = await response.json();
         if (response.ok) {
             alert('Sign in successful!');
+            console.log("User sign in details")
+            console.log(result);
+            setUserLoginDetails(result);
+            navigate('/');
         } else {
             alert('Failed to sign in');
             console.error('Error:', result.error || 'Failed to submit.');

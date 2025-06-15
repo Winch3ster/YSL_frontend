@@ -1,11 +1,14 @@
-import React, { useEffect, useState,useRef  } from 'react'
+import React, { useEffect, useState,useRef,useContext  } from 'react'
 import {Card, Flex, Modal, Row, Col} from 'antd';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import Loading from '../components/loading';
 import StandardButton from '../components/standard_button';
 import TextArea from 'antd/es/input/TextArea';
+import { AppContext } from "../App";
 
 const ConditionDetails = () => {
+        const {  userLoginDetails, setUserLoginDetails } = useContext(AppContext);
+    
     const MAXIMUM_CHARACTER_COUNT = 300;
     const { id } = useParams();
     const location = useLocation();
@@ -150,6 +153,14 @@ const ConditionDetails = () => {
             setText(e.target.value)
         }
     }
+    function getUserAccess(){
+        if (userLoginDetails && Object.keys(userLoginDetails).length === 0){
+            return "Guest";
+        }
+
+        return userLoginDetails.role;
+    }
+
 
     return loading ? <Loading></Loading> : (
         <>
@@ -165,7 +176,12 @@ const ConditionDetails = () => {
                 <div className='mt-5'>
                     <div className='flex items-center'>
                         <h1 style={{fontSize:"28px", marginRight:"10px"}}>Condition Info</h1>
+                        
+                    {
+                        getUserAccess() == "admin" &&
                         <StandardButton label="Edit" onClick={openEditCoditionModal}></StandardButton>
+                    }
+                    
                     </div>
 
                     <div className='flex justify-start pl-5'>

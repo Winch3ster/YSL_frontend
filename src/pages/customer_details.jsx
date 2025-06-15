@@ -1,12 +1,16 @@
-import React, { useEffect,useState,useRef   } from 'react'
+import React, { useEffect,useState,useRef,useContext   } from 'react'
 import { useParams, useNavigate  } from 'react-router-dom';
 import Loading from '../components/loading';
 import StandardButton from '../components/standard_button';
 import {Card, Flex, Modal, Row, Col, Button, Upload,message } from 'antd';
 import TextArea from 'antd/es/input/TextArea'
 import axios from 'axios';
+import { AppContext } from "../App";
+import SizedBox from '../components/sizedBox';
 
 const CustomerDetails = () => {
+    const {  userLoginDetails, setUserLoginDetails } = useContext(AppContext);
+    
     const MAXIMUM_CHARACTER_COUNT = 300;
     const { id } = useParams();
     const navigate = useNavigate();
@@ -205,7 +209,13 @@ const CustomerDetails = () => {
         return false;
     };
 
-  
+    function getUserAccess(){
+        if (userLoginDetails && Object.keys(userLoginDetails).length === 0){
+            return "Guest";
+        }
+
+        return userLoginDetails.role;
+    }
 
 
     return isLoading ?  
@@ -217,7 +227,15 @@ const CustomerDetails = () => {
             <div style={{ padding: 20 }}>
             <div style={{display:'flex', alignItems:'center'}}>
                 <h1 style={{fontSize:"28px"}}>Customer Details</h1>
-                <Button onClick={() => navigate(`/editCustomerDetails/${id}`)} style={{marginLeft:"20px"}}>Edit</Button>
+
+                {
+                    getUserAccess() == "admin" &&
+                    <div className='flex'>
+                        <SizedBox width={50}></SizedBox>
+                        <StandardButton onClick={() => navigate(`/editCustomerDetails/${id}`)} label="Edit"></StandardButton>
+                    </div>
+                }
+
             </div>
 
             <div className='flex w-8/12 justify-between items-center pt-5'>
