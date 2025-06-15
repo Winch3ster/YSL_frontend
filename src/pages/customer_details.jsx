@@ -229,7 +229,7 @@ const CustomerDetails = () => {
                 <h1 style={{fontSize:"28px"}}>Customer Details</h1>
 
                 {
-                    getUserAccess() == "admin" &&
+                    getUserAccess() == "Admin" &&
                     <div className='flex'>
                         <SizedBox width={50}></SizedBox>
                         <StandardButton onClick={() => navigate(`/editCustomerDetails/${id}`)} label="Edit"></StandardButton>

@@ -178,7 +178,7 @@ const ConditionDetails = () => {
                         <h1 style={{fontSize:"28px", marginRight:"10px"}}>Condition Info</h1>
                         
                     {
-                        getUserAccess() == "admin" &&
+                        getUserAccess() == "Admin" &&
                         <StandardButton label="Edit" onClick={openEditCoditionModal}></StandardButton>
                     }
                     
