@@ -4,6 +4,7 @@ import { Input, Space,Table,Tag  } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import StandardButton from '../components/standard_button';
 import SizedBox from '../components/sizedBox';
+import Loading from '../components/loading';
 
 
 const { Search } = Input;
@@ -14,7 +15,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const [allCustomerData, setAllCustomerData] = useState([]);
   const [filteredCustomerData, setFilteredCustomerData] = useState([]);
-    
+  const [isLoading, setIsLoading] = useState(true)
 
   const onSearch = (value, _e, info) => {
     console.log(info === null || info === void 0 ? void 0 : info.source, value);
@@ -85,9 +86,12 @@ const Dashboard = () => {
     useEffect(() => async () => {
         //Get the user data from the API
         await fetchData();
+        setIsLoading(false);
     }, []);
 
-  return (
+  return isLoading ? 
+    <Loading/>
+  : (
         <div>
             {/* Greetings*/}
             <div style={{fontSize:"16px"}}>Greeting! Welcome to YSL Management Dashboard</div>
