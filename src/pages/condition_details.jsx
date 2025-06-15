@@ -1,10 +1,12 @@
 import React, { useEffect, useState,useRef,useContext  } from 'react'
-import {Card, Flex, Modal, Row, Col} from 'antd';
+import {Card, Flex, Modal, Row, Col, Upload} from 'antd';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import Loading from '../components/loading';
 import StandardButton from '../components/standard_button';
 import TextArea from 'antd/es/input/TextArea';
 import { AppContext } from "../App";
+import axios from 'axios';
+
 
 const ConditionDetails = () => {
     const {  userLoginDetails, setUserLoginDetails } = useContext(AppContext);
@@ -23,6 +25,7 @@ const ConditionDetails = () => {
     const [characterCount, setCharacterCount] = useState(0);
     const [text, setText] = useState('');
     const [treatmentIsMarkedAsCompleted, setTreatmentIsMarkedAsCompleted] = useState(false);
+    const [conditionImageUrl, setConditionImageUrl] = useState();
 
     const fetchTreatmentsByCondition = async () => {
         try {
@@ -70,11 +73,94 @@ const ConditionDetails = () => {
     }
 
 
+    const fetchConditionImage = async () =>{
+        const formData = new FormData();
+        formData.append("conditionID", id);
+        formData.append("customerId", location.state?.customerData.customerId);
+
+
+        try {
+            const response = await fetch("http://127.0.0.1:5000/getConditionImage", {
+            method: "POST",
+            body: formData,
+            });
+
+            if (!response.ok) {
+                console.log("Failed to fetch file");
+                setLoading(false);
+            }else{
+
+                const blob = await response.blob();
+
+                // If it's an image or PDF:
+                const fileURL = URL.createObjectURL(blob);
+                setConditionImageUrl(fileURL)
+            }
+
+            setLoading(false); // or embed it into <img> or <iframe>
+
+        } catch (error) {
+            console.error("Error fetching file:", error);
+        }
+        
+    }
+
+
+
+
+    const handleConditionImageUpload = async (file) => {
+        const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+        if (!isJpgOrPng) {
+            alert('You can only upload JPG/PNG file!');
+            setLoading(false)
+            return false;
+        }
+        const isLt2M = file.size / 1024 / 1024 < 2;
+        if (!isLt2M) {
+           alert('Image must smaller than 2MB!');
+           setLoading(false)
+           return false;
+        }
+
+        const extension = file.name.split('.').pop();
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('customerId', customerInfo.customerId); 
+        formData.append('conditionID', id); 
+        formData.append('fileName', `condition_${id}.${extension}`); 
+
+        try {
+            const response = await axios.post('http://127.0.0.1:5000/uploadConditionImage', formData, {
+                headers: {
+                'Content-Type': 'multipart/form-data',
+                },
+            });
+            console.log("This is the response")
+            console.log(response)
+
+             console.log("result.data.status: " + response.data.status)
+            if (response.data.status == "Success") {
+                alert(`${file.name} uploaded successfully`);
+            } else {
+                alert(`Failed to upload ${file.name}`);
+            }
+            setLoading(true);
+            fetchConditionImage();
+            setLoading(false);
+        } catch (error) {
+            console.error(error);
+            alert(`Error uploading file: ${file.name}`)
+        }
+        return false;
+    };
+
+
     useEffect(() => async () => {
         await fetchTreatmentsByCondition();
         setConditionData(location.state?.condition);
         setCustomerInfo(location.state?.customerData);
         setTreatmentIsMarkedAsCompleted(location.state?.condition?.undergoingTreatment)
+        await fetchConditionImage();
         setLoading(false);
     },[])
 
@@ -161,6 +247,16 @@ const ConditionDetails = () => {
         return userLoginDetails.role;
     }
 
+    const handleChange = info => {
+        if (info.file.status === 'uploading') {
+        setLoading(true);
+        return;
+        }
+        if (info.file.status === 'done') {
+            setLoading(false);
+       
+        }
+    };
 
     return loading ? <Loading></Loading> : (
         <>
@@ -202,7 +298,37 @@ const ConditionDetails = () => {
                             }</p>
                         </div>
                         <div style={{width:"200px"}}></div>
-                        <div style={{width:"250px", height:"250px"}} className='rounded-lg bg-gray-200'></div>
+
+
+                        
+                            {
+                                conditionImageUrl ? 
+                                <div
+                                style={{
+                                    width: "250px",
+                                    height: "250px",
+                                    backgroundImage: conditionImageUrl ? `url(${conditionImageUrl})` : undefined,
+                                    backgroundSize: "cover",
+                                    backgroundPosition: "center"
+                                }}
+                                className="rounded-lg "
+                                />
+                                :
+                                    <Upload
+                                    name="avatar"
+                                    listType="picture-card"
+                                    className="avatar-uploader"
+                                    showUploadList={false}
+                                    action="C:\Users\User\Desktop\YSL_backend\database\data\attachment\12312\"
+                                    beforeUpload={handleConditionImageUpload}
+                                    onChange={handleChange}
+                                >
+                                 <p>Upload Image +</p>
+                                </Upload>
+                           
+                                
+                            }
+
                         
                     </div>
                     
