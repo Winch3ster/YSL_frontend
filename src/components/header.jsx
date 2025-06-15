@@ -3,6 +3,7 @@ import StandardButton from './standard_button'
 import { useNavigate } from 'react-router-dom'
 import { AppContext } from "../App";
 import { Popover,Avatar } from 'antd';
+import SizedBox from './sizedBox';
 
 const Header = () => {
   const navigate = useNavigate()
@@ -16,8 +17,13 @@ const Header = () => {
     alert("Signed out");
   }
   const content = (
-    <StandardButton label="Sign out" onClick={signOut}></StandardButton>    
-  );
+    <div className='block'>
+      <StandardButton label="Admin" onClick={() => {navigate('/adminConfig/')}}></StandardButton>   
+      <br></br> 
+      <SizedBox height={10}></SizedBox>
+      <StandardButton label="Sign out" onClick={signOut} danger={true}></StandardButton>   
+    </div>
+    );
 
   return (
     <div>

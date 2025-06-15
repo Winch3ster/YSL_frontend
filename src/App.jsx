@@ -11,6 +11,7 @@ import TreatmentDetailsView from './pages/treatment_details';
 import EditTreatmentView from './pages/edit_treatment';
 import EditCustomerDetailsPage from './pages/edit_customer_details';
 import AddCustomerDetailsPage from './pages/add_customer';
+import AdminConfigPage from './pages/admin_config';
 
 // Create the context
 export const AppContext = createContext();
@@ -34,6 +35,7 @@ function App() {
               <Route path="/editTreatmentDetails/:treatmentID" element={<EditTreatmentView />} />
               <Route path="/editCustomerDetails/:customerID" element={<EditCustomerDetailsPage />} />
               <Route path="/addCustomer/" element={<AddCustomerDetailsPage />} />
+              <Route path="/adminConfig/" element={<AdminConfigPage />} />
             </Routes>
         </div>
       </div>
