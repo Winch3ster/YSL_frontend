@@ -245,16 +245,16 @@ const CustomerDetails = () => {
             layout="horizontal"
             labelStyle={{ fontWeight: 'bold' }}
             >
-                <Descriptions.Item label="Customer ID" span={2}>
+                <Descriptions.Item label="Customer ID" >
                     {customerData.customerId ?? "-"}
                 </Descriptions.Item>
-                <Descriptions.Item label="Old Customer ID" span={1}>
+                <Descriptions.Item label="Old Customer ID">
                     {customerData.oldCustomerId ?? "-"}
                 </Descriptions.Item>
-                <Descriptions.Item label="Name" span={1}>
+                <Descriptions.Item label="Name" span={2}>
                     {customerData.customerName ?? "-"}
                 </Descriptions.Item>
-                <Descriptions.Item label="Email" span={1}>
+                <Descriptions.Item label="Email" span={2}>
                     {customerData.email ?? "-"}
                 </Descriptions.Item>
                 <Descriptions.Item label="IC" span={1}>
@@ -273,6 +273,9 @@ const CustomerDetails = () => {
                 <Descriptions.Item label="Instagram" span={1}>
                     {customerData.instagram ?? "-"}
                 </Descriptions.Item>
+                <Descriptions.Item label="WeChat" span={1}>
+                    {customerData.wechat ?? "-"}
+                </Descriptions.Item>
                 <Descriptions.Item label="Address" span={3}>
                     {customerData.address ?? "-"}
                 </Descriptions.Item>
@@ -281,9 +284,27 @@ const CustomerDetails = () => {
                 </Descriptions.Item>
             </Descriptions>
 
-
-
              <div style={{height:"20px"}}/>
+
+
+            <Descriptions
+                title="Medical Information"
+                bordered
+                column={2}
+                layout="horizontal"
+                labelStyle={{ fontWeight: 'bold' }}
+            >
+                <Descriptions.Item label="Height" span={1}>
+                    {customerData.height ? `${customerData.height} cm` : "-"}
+                </Descriptions.Item>
+                <Descriptions.Item label="Weight" span={1}>
+                    {customerData.weight ? `${customerData.weight} kg` : "-"}
+                </Descriptions.Item>
+                <Descriptions.Item label="Blood Type" span={1}>
+                    {customerData.bloodType ?? "-"}
+                </Descriptions.Item>
+            </Descriptions>
+            <div style={{height:"20px"}}/>
             <div>
                 {customerHasConsentForm ? 
                 <div style={{display:"flex"}}>
