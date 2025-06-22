@@ -88,10 +88,6 @@ const AddCustomerDetailsPage = () => {
             <Form.Item
                 label="Email"
                 name="email"
-                rules={[{
-                    required: true,
-                    message:"Please input customer email!"
-                }]}
             >
                 <Input></Input>
             </Form.Item>
@@ -129,7 +125,12 @@ const AddCustomerDetailsPage = () => {
                     message:"Please input customer race!"
                 }]}
             >
-                    <Input></Input>
+                    <Select placeholder="Select race">
+                        <Option value="chinese">Chinese</Option>
+                        <Option value="malay">Malay</Option>
+                        <Option value="indian">Indian</Option>
+                        <Option value="other">Other</Option>
+                    </Select>
             </Form.Item>
 
             <Form.Item

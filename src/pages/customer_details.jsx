@@ -2,7 +2,7 @@ import React, { useEffect,useState,useRef,useContext   } from 'react'
 import { useParams, useNavigate  } from 'react-router-dom';
 import Loading from '../components/loading';
 import StandardButton from '../components/standard_button';
-import {Card, Flex, Modal, Row, Col, Button, Upload,message } from 'antd';
+import {Card, Flex, Modal, Row, Col, Button, Upload,message, Descriptions } from 'antd';
 import TextArea from 'antd/es/input/TextArea'
 import axios from 'axios';
 import { AppContext } from "../App";
@@ -238,25 +238,51 @@ const CustomerDetails = () => {
 
             </div>
 
-            <div className='flex w-8/12 justify-between items-center pt-5'>
-                <div>
-                    <p>Customer ID: {customerData.customerId ?? "-"}</p>
-                    <p>Old Customer ID: {customerData.oldCustomerId ?? "-"}</p>
-                    <p>Name: {customerData.customerName ?? "-"}</p>
-                    <p>Email: {customerData.email ?? "-"}</p>
-                    <p>IC: {customerData.ic ?? "-"}</p>
-                    <p>Gender: {customerData.gender ?? "-"}</p>
-                    <p>Race: {customerData.race ?? "-"}</p>
-                </div>
+            <Descriptions
+            title="Customer Information"
+            bordered
+            column={2} 
+            layout="horizontal"
+            labelStyle={{ fontWeight: 'bold' }}
+            >
+                <Descriptions.Item label="Customer ID" span={2}>
+                    {customerData.customerId ?? "-"}
+                </Descriptions.Item>
+                <Descriptions.Item label="Old Customer ID" span={1}>
+                    {customerData.oldCustomerId ?? "-"}
+                </Descriptions.Item>
+                <Descriptions.Item label="Name" span={1}>
+                    {customerData.customerName ?? "-"}
+                </Descriptions.Item>
+                <Descriptions.Item label="Email" span={1}>
+                    {customerData.email ?? "-"}
+                </Descriptions.Item>
+                <Descriptions.Item label="IC" span={1}>
+                    {customerData.ic ?? "-"}
+                </Descriptions.Item>
+                <Descriptions.Item label="Gender" span={1}>
+                    {customerData.gender ?? "-"}
+                </Descriptions.Item>
+                <Descriptions.Item label="Race" span={1}>
+                    {customerData.race ?? "-"}
+                </Descriptions.Item>
 
-                <div>
-                    <p>Address: {customerData.address ?? "-"}</p>
-                    <p>Handphone: {customerData.handphone ?? "-"}</p>
-                    <p>Instagram: {customerData.instagram ?? "-"}</p>
-                    <p>How did you get know our center?: {customerData.howDidYouFindUs ?? "-"}</p>
-                </div>
+                <Descriptions.Item label="Handphone" span={1}>
+                    {customerData.handphone ?? "-"}
+                </Descriptions.Item>
+                <Descriptions.Item label="Instagram" span={1}>
+                    {customerData.instagram ?? "-"}
+                </Descriptions.Item>
+                <Descriptions.Item label="Address" span={3}>
+                    {customerData.address ?? "-"}
+                </Descriptions.Item>
+                <Descriptions.Item label="How did you get to know our center?" span={2}>
+                    {customerData.howDidYouFindUs ?? "-"}
+                </Descriptions.Item>
+            </Descriptions>
 
-            </div>
+
+
              <div style={{height:"20px"}}/>
             <div>
                 {customerHasConsentForm ? 
