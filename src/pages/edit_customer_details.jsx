@@ -46,6 +46,10 @@ const EditCustomerDetailsPage = () => {
                     "instagram": values.instagram,
                     "oldCustomerId": values.oldCustomerId,
                     "race": values.race,
+                    "wechat": values.wechat,
+                    "height": values.height,
+                    "weight": values.weight,
+                    "bloodType": values.bloodType,
                 }), // POST body
             });
             if (!response.ok) {
@@ -108,6 +112,10 @@ const EditCustomerDetailsPage = () => {
                         "instagram":customerData.instagram,
                         "centerDiscovery":customerData.howDidYouFindUs,
                         "race":customerData.race,
+                        "wechat": customerData.wechat,
+                        "height": customerData.height,
+                        "weight": customerData.weight,
+                        "bloodType": customerData.bloodType,
                     }}
                 >   
                     <Form.Item
@@ -220,6 +228,31 @@ const EditCustomerDetailsPage = () => {
                         <TextArea></TextArea>
                     </Form.Item>
 
+
+                     <div>
+                <p className='font-bold text-lg'>Health Matters</p>
+                <div className='flex w-full '>
+                    <Form.Item label="Height (cm)" name="height" style={{width: '50%'}}>
+                        <Input></Input>
+                    </Form.Item>
+                    <Form.Item label="Weight (kg)" name="weight" style={{width: '50%'}}>
+                        <Input></Input>
+                    </Form.Item>
+
+                    </div>
+                        <Form.Item label="Blood Type" name="bloodType">
+                            <Select placeholder="Select blood type">
+                                <Option value="A+">A+</Option>
+                                <Option value="A-">A-</Option>
+                                <Option value="B+">B+</Option>
+                                <Option value="B-">B-</Option>
+                                <Option value="O+">O+</Option>
+                                <Option value="O-">O-</Option>
+                                <Option value="AB+">AB+</Option>
+                                <Option value="AB-">AB-</Option>
+                            </Select>
+                        </Form.Item>
+                    </div>
                     <Form.Item
                         label={null}
                     >
